@@ -1,7 +1,12 @@
 #include <iostream>
+#include <fstream>
+#include <string>
+#include <sstream>
+#include "graph.cpp"
 
-using namespace std;
-int main(){
-    cout<<"ola"<<endl;
+int main() {
+    Graph<float> grafo;
+    grafo.generate_graph(5);
+    grafo.print();
+    return 0;
 }
-
