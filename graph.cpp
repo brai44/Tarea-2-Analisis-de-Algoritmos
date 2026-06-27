@@ -53,11 +53,12 @@ public:
         }
     }
 
-    void generate_graph(int n){
+    void generate_graph(int n, bool loops = false, bool negatives = false){
         std::random_device rd;
         std::mt19937 gen(rd());
-        std::uniform_int_distribution<> distribucion(-10, 10);
-        int numero_aleatorio = distribucion(gen);
+        int min = negatives ? -10 : 0;
+        int max = 10; 
+        std::uniform_int_distribution<> distribucion(min, max);
         adj.resize(
             n,
             std::vector<T>(
@@ -68,8 +69,11 @@ public:
         for(int i = 0; i < n; i++){
             for(int j = 0; j < n; j++){
                 int numero_aleatorio = distribucion(gen);
-                adj[i][j] = numero_aleatorio;
-        
+                if (!loops && i == j){
+                    adj[i][j] = 0;
+                } else {
+                   adj[i][j] = numero_aleatorio; 
+                }     
             }
         }
     }
@@ -78,6 +82,15 @@ public:
         return adj.size();
     }
 
+    std::vector<std::vector<T>>& get_adj_ref() {
+        return adj;
+    }
+
+    // Solo usar cuando los grafos son chicos
+    std::vector<std::vector<T>> get_adj_copy(){
+        return adj;
+    } 
+    
     void print(){
         std::size_t n = size();
         const T T_max = std::numeric_limits<T>::max();
