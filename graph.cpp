@@ -54,6 +54,7 @@ public:
     }
 
     void generate_graph(int n, bool loops = false, bool negatives = false){
+        const int INF = 1000000000;
         std::random_device rd;
         std::mt19937 gen(rd());
         int min = negatives ? -10 : 0;
@@ -69,6 +70,9 @@ public:
         for(int i = 0; i < n; i++){
             for(int j = 0; j < n; j++){
                 int numero_aleatorio = distribucion(gen);
+                if (numero_aleatorio == 0){
+                    numero_aleatorio = INF;
+                }
                 if (!loops && i == j){
                     adj[i][j] = 0;
                 } else {
