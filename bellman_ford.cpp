@@ -9,74 +9,48 @@
 #include <sstream>
 #include <string>
 #include <vector>
+#include "edge.h"
 
 template<typename T>
-struct Edge{
-    size_t source, destination; //entero sin signo
-    T w;
-};
+std::vector<int>bellmanFord(std::vector<Edge<T>>& graph, int source_node){
+    std::size_t V = graph.size()
+    const T INF = std::numeric_limits<T>::max();
 
-template<typename T>
-struct Graph{
-    std::vector<Edge<T>> edges;
-    std::size_t num_nodes;
+    // Inicializar distancia desde source a los demas vertices como infinito
+    std::vector<int> distance(V, INF);
+    // Vector contiene el predecesor para llegar al nodo con indice v
+    // pred[1] es el paso anterior para llegar al nodo 1
+    std::vector<int> pred(V, -1)
 
-    Graph(void) : num_nodes(0){
-    }
+    // Distancia al origen es 0
+    distance[source_node] = T()
 
-    Graph(const std::size_t n){
-        num_nodes = n;
-    }
+    // Iterar V-1 veces
+    for(std::size_t i=1; i<V; i++){
+        bool changes = false;
 
-    // Lectura desde archivo
-    Graph(const std::string filename, bool zero_indexed = true){
-        std::ifstream input(filename); // Abre el archivo txt
-        std::string line;
-
-        std::getline(input, line);     // Lee solo la primera linea
-        std::stringstream ss(line);    // Convierte esa linea en un stream para extraer strings
-
-        std::size_t n, m, u, v;
-        T w;
-
-        // extraemos la primera linea que contiene 
-        // [nodos de salida] [nodos de llegada] [cantidad de aristas]
-        ss >> n >> n >> m; 
-        num_nodes = n;
-
-        // Ciclo que se repite una vez por arista
-        while(m--){
-            std::getline(input, line);
-            ss.clear();
-            ss.str(std::string());
-            ss.str(line);
-            
-            // [nodo de origen] [nodo de desitno] [peso]
-            ss >> u >> v >> w;
-
-            if(zero_indexed){
-                u--;
-                v--;
+        //En cada iteracion pasamos por todas las aristas
+        for(const auto& e : graph){
+            // Condicion 1: El nodo origen de e debe haber sido descubierto (no INF)
+            // Condicion 2: Formula de relajacion
+            if(distance[e.source]!=INF && distance[e.source] + e.w < distance[e.destination]){
+                distance[e.destination] = distance[e.source] + e.w;
+                pred[e.destination] = e.source;
+                changes = true;
             }
-
-            // Avoid loops
-            if (u==v)
-                continue;
-            
-            Edge<T> actual_edge = {u, v, w};
-            edges.push_back(actual_edge);
         }
+        // Si no hubo cambios al pasar por todas las aristas se llego al óptimo
+        if(!changes)
+            break;
     }
 
-    // Imprimir lista de aristas
-    void print(void) const {
-        std::cout<<"Grafo con "<<num_node <<" nodos y "<<edges.size()<<" aristas:\n";
-        for (const auto& edge : edges) {
-            std::cout << "Origen: " << edge.source 
-                      << " -> Destino: " << edge.destination 
-                      << " | Peso: " << edge.w << "\n";
+    for(const auto& e: graph){
+        if(distance[e.source]!=INF && distance[e.source] + e.w < distance[e.destination]){
+            std::cout<<"Ciclo de peso negativo encontrado.\n";
+            return;
         }
     }
-};
+    return;
+}
 
 #endif

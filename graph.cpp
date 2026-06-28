@@ -9,7 +9,7 @@
 #include <utility>
 #include <random>
 #include <limits>
-
+#include "edge.h"
 
 template<typename T>
 
@@ -18,6 +18,7 @@ private:
     int q_nodes = 0;
     int q_edges = 0;
     std::vector<std::vector<T>> adj;
+    std::vector<Edge<T>> edge_list;
 
 public:
 
@@ -34,6 +35,7 @@ public:
         ss >> q_nodes >> q_nodes >> q_edges; 
 
         adj.assign(q_nodes, std::vector<T>(q_nodes, std::numeric_limits<T>::max()));
+        edge_list.clear();
 
         for (int i = 0; i < q_nodes; i++)
             adj[i][i] = T(); 
@@ -50,6 +52,7 @@ public:
             }
 
             adj[u][v] = std::min(adj[u][v], w);
+            edge_list.push_back({u,v,w});
         }
     }
 
@@ -60,6 +63,8 @@ public:
         int min = negatives ? -10 : 0;
         int max = 10; 
         std::uniform_int_distribution<> distribucion(min, max);
+        q_nodes = n;
+        edge_list.clear();
         adj.resize(
             n,
             std::vector<T>(
@@ -77,9 +82,11 @@ public:
                     adj[i][j] = 0;
                 } else {
                    adj[i][j] = numero_aleatorio; 
+                   edge_list.push_back({i,j,numero_aleatorio});
                 }     
             }
         }
+        q_edges = edge_list.size();
     }
 
     std::size_t size(){
@@ -94,8 +101,16 @@ public:
     std::vector<std::vector<T>> get_adj_copy(){
         return adj;
     } 
+
+    std::vector<Edge<T>>& get_edge_list(){
+        return edge_list;
+    }
+
+    std::vector<Edge<T>> get_edge_list_copy(){
+        return edge_list;
+    }
     
-    void print(){
+    void print_adj(){
         std::size_t n = size();
         const T T_max = std::numeric_limits<T>::max();
 
@@ -107,6 +122,12 @@ public:
             }
 
             std::cout<<std::endl;
+        }
+    }
+    void print_edg(){
+        std::cout<<"[Nodo entrada], [Nodo salida], [Peso]"<<std::endl;
+        for(const auto& e:edge_list){
+            std::cout<<e.source<<", "<<e.destination<<", "<<e.w<<std::endl;
         }
     }
 
