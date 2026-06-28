@@ -9,6 +9,7 @@
 #include <utility>
 #include <random>
 #include <limits>
+#include <set>
 #include "utils.h"
 
 template<typename T>
@@ -88,6 +89,39 @@ public:
         }
         q_edges = edge_list.size();
     }
+
+void create_graph_densidad(int n, int e) {
+    q_nodes = n;
+    edge_list.clear();
+    
+    // Inicializar matriz con Infinito
+    adj.assign(n, std::vector<T>(n, std::numeric_limits<T>::max()));
+    for(int i = 0; i < n; i++) adj[i][i] = 0; // Distancia al mismo nodo es 0
+
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<int> dist_nodos(0, n - 1);
+    std::uniform_real_distribution<double> dist_pesos(1.0, 100.0);
+
+    // Usamos un set para evitar repetir la misma arista (u, v)
+    std::set<std::pair<int, int>> aristas_creadas;
+
+    while(aristas_creadas.size() < (size_t)e) {
+        int u = dist_nodos(gen);
+        int v = dist_nodos(gen);
+
+        // Validaciones: no bucles, no aristas repetidas
+        if (u == v || aristas_creadas.count({u, v})) continue;
+
+        double peso = dist_pesos(gen);
+        
+        // Guardar
+        aristas_creadas.insert({u, v});
+        edge_list.push_back({u, v, peso});
+        adj[u][v] = peso;
+    }
+    q_edges = edge_list.size();
+}
 
     std::size_t size(){
         return adj.size();

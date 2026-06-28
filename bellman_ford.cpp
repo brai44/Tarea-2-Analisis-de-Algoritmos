@@ -89,8 +89,25 @@ void printPath_Bellman_Ford(int u, int v, const std::vector<int>& pred) {
     std::reverse(path.begin(), path.end());
 
     for (size_t i = 0; i < path.size(); ++i) {
-        std::cout << path[i] << (i < path.size() - 1 ? " -> " : "");
+        std::cout << path[i] +1<< (i < path.size() - 1 ? " -> " : "");
     }
     std::cout << std::endl;
+}
+
+template<typename T>
+void print_distance_matrix(const ASPSResult<T>& result, int n) {
+    const T INF = std::numeric_limits<T>::max();
+    std::cout << "\n--- Matriz de Distancias ---" << std::endl;
+
+    for (int i = 0; i < n; ++i) {
+        for (int j = 0; j < n; ++j) {
+            if (result.distances[i][j] == INF) {
+                std::cout << " INF ";
+            } else {
+                std::cout << " " << result.distances[i][j] << " ";
+            }
+        }
+        std::cout << std::endl;
+    }
 }
 #endif
