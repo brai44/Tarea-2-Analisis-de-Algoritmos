@@ -124,6 +124,7 @@ public:
             std::cout<<std::endl;
         }
     }
+    
     void print_edg(){
         std::cout<<"[Nodo entrada], [Nodo salida], [Peso]"<<std::endl;
         for(const auto& e:edge_list){
