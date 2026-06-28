@@ -10,9 +10,9 @@ int main() {
     Graph<float> grafo;
     grafo.generate_graph(3);
     grafo.print();
-    auto ajd_copy = grafo.get_adj_copy();
-    floydWarshall(ajd_copy);
+    auto mask = floydWarshall(grafo.get_adj_ref());
     std::cout << std::endl;
     grafo.print();
+    printPath(1, 2, mask);
     return 0;
 }

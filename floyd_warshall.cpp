@@ -13,13 +13,14 @@
 #include <limits> 
 
 template<typename T>
-void floydWarshall(std::vector<std::vector<T>>& adj) {
+std::vector<std::vector<int>> floydWarshall(std::vector<std::vector<T>>& adj) {
     std::size_t n = adj.size();
     bool size_limit = n < 8;
-    if (n < 8){
-        std::vector<std::vector<int>> mask;
+    std::vector<std::vector<int>> mask;
+    if (size_limit){
+        mask.assign(n, std::vector<int>(n));
         for (int i = 0; i < n; i++){
-            for (int j = 0; j < 0 ; j++){
+            for (int j = 0; j < n ; j++){
                 if (adj[i][j] == std::numeric_limits<T>::max()) 
                     mask[i][j] = -1; 
                 else
@@ -27,7 +28,6 @@ void floydWarshall(std::vector<std::vector<T>>& adj) {
             }
         }
     }
-
 
     const T T_max = std::numeric_limits<T>::max();
 
@@ -39,12 +39,39 @@ void floydWarshall(std::vector<std::vector<T>>& adj) {
                     } else {
                         if (adj[i][j] > adj[i][k] + adj[k][j]) {
                             adj[i][j] = adj[i][k] + adj[k][j];
+                            if (size_limit){
+                                mask[i][j] = mask[i][k]; 
+                            }
                         }
                     }
                 }
             }
         }
     }
+
+    return mask;
 }
+
+void printPath(int u, int v , std::vector<std::vector<int>>& mask) 
+{ 
+    bool bool_path = true;
+    if (mask[u][v] == -1) {
+        std::cout << "No path";
+        bool_path = false;
+    }
+
+    std::vector<int> path = { u }; 
+    while (u != v) { 
+        u = mask[u][v]; 
+        path.push_back(u); 
+    } 
+
+    if (bool_path){
+        int n = path.size(); 
+        for (int i = 0; i < n - 1; i++) 
+            std::cout << path[i] << " -> "; 
+        std::cout << path[n - 1] << std::endl; 
+    }
+} 
 
 #endif
