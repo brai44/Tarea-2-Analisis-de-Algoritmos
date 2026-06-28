@@ -9,21 +9,21 @@
 #include <sstream>
 #include <string>
 #include <vector>
-#include "edge.h"
+#include "utils.h"
 
 template<typename T>
-std::vector<int>bellmanFord(std::vector<Edge<T>>& graph, int source_node){
-    std::size_t V = graph.size()
+void bellmanFord(std::vector<Edge<T>>& graph, int n, int source_node, ASPSResult<T>& result){
+    std::size_t V = n;
     const T INF = std::numeric_limits<T>::max();
 
     // Inicializar distancia desde source a los demas vertices como infinito
-    std::vector<int> distance(V, INF);
+    std::vector<T> distance(V, INF);
     // Vector contiene el predecesor para llegar al nodo con indice v
     // pred[1] es el paso anterior para llegar al nodo 1
-    std::vector<int> pred(V, -1)
+    std::vector<int> pred(V, -1);
 
     // Distancia al origen es 0
-    distance[source_node] = T()
+    distance[source_node] = 0;
 
     // Iterar V-1 veces
     for(std::size_t i=1; i<V; i++){
@@ -50,7 +50,47 @@ std::vector<int>bellmanFord(std::vector<Edge<T>>& graph, int source_node){
             return;
         }
     }
-    return;
+    result.distances.push_back(distance);
+    result.preds.push_back(pred);
 }
 
+template<typename T>
+ASPSResult<T> asps_bellman_ford(std::vector<Edge<T>>& graph, int n){
+    ASPSResult<T> result;
+    //Reservar espacio para evitar reallocationes
+    result.distances.reserve(n);
+    result.preds.reserve(n);
+
+    for(int i=0; i<n; i++){
+        bellmanFord(graph, n, i, result);
+    }
+    return result;
+}
+
+
+void printPath_Bellman_Ford(int u, int v, const std::vector<int>& pred) {
+    // 1. Verificamos si hay camino
+    if (pred[v] == -1 && u != v) {
+        std::cout << "No existe camino de " << u << " a " << v << std::endl;
+        return;
+    }
+
+    // 2. Reconstruimos el camino desde v hacia atrás
+    std::vector<int> path;
+    int curr = v;
+    
+    while (curr != -1) {
+        path.push_back(curr);
+        if (curr == u) break; // Llegamos al origen, paramos
+        curr = pred[curr];
+    }
+
+    // 3. Imprimimos el camino (como lo guardamos al revés, lo invertimos)
+    std::reverse(path.begin(), path.end());
+
+    for (size_t i = 0; i < path.size(); ++i) {
+        std::cout << path[i] << (i < path.size() - 1 ? " -> " : "");
+    }
+    std::cout << std::endl;
+}
 #endif

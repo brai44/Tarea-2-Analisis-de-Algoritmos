@@ -9,7 +9,7 @@
 #include <utility>
 #include <random>
 #include <limits>
-#include "edge.h"
+#include "utils.h"
 
 template<typename T>
 
@@ -42,7 +42,7 @@ public:
 
         int u, v;
         T w;
-        
+
         while (std::getline(input, line)) {
             std::stringstream ss2(line);
             ss2 >> u >> v >> w;
@@ -110,6 +110,10 @@ public:
         return edge_list;
     }
     
+    int get_q_nodes(){
+        return q_nodes;
+    }
+    
     void print_adj(){
         std::size_t n = size();
         const T T_max = std::numeric_limits<T>::max();
@@ -124,15 +128,13 @@ public:
             std::cout<<std::endl;
         }
     }
-    
+
     void print_edg(){
         std::cout<<"[Nodo entrada], [Nodo salida], [Peso]"<<std::endl;
         for(const auto& e:edge_list){
             std::cout<<e.source<<", "<<e.destination<<", "<<e.w<<std::endl;
         }
     }
-
-
 };
 
 #endif
