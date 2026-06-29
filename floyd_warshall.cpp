@@ -65,7 +65,7 @@ std::vector<std::vector<int>> floydWarshall(std::vector<std::vector<T>>& adj) {
     return mask;
 }
 
-void printPath(int u, int v , std::vector<std::vector<int>>& mask) 
+void printPath_Floyd_Warshall(int u, int v , std::vector<std::vector<int>>& mask) 
 { 
     if (mask.size() != 0){
         if (mask[u][v] == -1) {
