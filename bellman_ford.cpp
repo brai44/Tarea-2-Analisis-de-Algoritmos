@@ -48,6 +48,7 @@ void bellmanFord(std::vector<Edge<T>>& graph, int n, int source_node, ASPSResult
     for(const auto& e: graph){
         if(distance[e.source]!=INF && distance[e.source] + e.w < distance[e.destination]){
             std::cout<<"Ciclo de peso negativo encontrado.\n";
+            result.negative_cycle = true;
             return;
         }
     }
@@ -72,7 +73,7 @@ ASPSResult<T> asps_bellman_ford(std::vector<Edge<T>>& graph, int n){
 void printPath_Bellman_Ford(int u, int v, const std::vector<int>& pred) {
     // 1. Verificamos si hay camino
     if (pred[v] == -1 && u != v) {
-        std::cout << "No existe camino de " << u << " a " << v << std::endl;
+        std::cout << "No existe camino de " << u + 1 << " a " << v + 1 << std::endl;
         return;
     }
 
@@ -90,44 +91,46 @@ void printPath_Bellman_Ford(int u, int v, const std::vector<int>& pred) {
     std::reverse(path.begin(), path.end());
 
     for (size_t i = 0; i < path.size(); ++i) {
-        std::cout << path[i] << (i < path.size() - 1 ? " -> " : "");
+        std::cout << path[i] + 1 << (i < path.size() - 1 ? " -> " : "");
     }
     std::cout << std::endl;
 }
 
 template<typename T>
 void print_distance_matrix(const ASPSResult<T>& result, int n) {
-    const T INF = std::numeric_limits<T>::max();
-    std::cout << "\n--- Matriz de Distancias ---\n" << std::endl;
-    const int width = 4; 
+    if (!result.negative_cycle){
+        const T INF = std::numeric_limits<T>::max();
+        std::cout << "\n--- Matriz de Distancias ---\n" << std::endl;
+        const int width = 4; 
 
-    std::cout << "   ";
-    for (int i = 0; i < n; i++){
-        std::cout << std::setw(width) << i;
-    }
-
-    std::cout << "\n  ┌";
-    for (int k = 0; k < n * (width) + 1; k++) std::cout << "─";
-    std::cout << "┐" << std::endl;
-
-    for (std::size_t i = 0; i < n; i++) {
-        std::cout << i << " │"; 
-
-        for (std::size_t j = 0; j < n; j++) {
-            if (result.distances[i][j] == INF){
-                std::cout << std::setw(width) << "INF";
-            } else{
-                std::cout << std::setw(width) << result.distances[i][j];
-            }
+        std::cout << "   ";
+        for (int i = 0; i < n; i++){
+            std::cout << std::setw(width) << i + 1;
         }
-        
-        std::cout << " │" << std::endl; 
-    }
 
-    // 3. Línea inferior
-    std::cout << "  └";
-    for (int k = 0; k < n * (width) + 1; k++) std::cout << "─";
-    std::cout << "┘" << std::endl;
+        std::cout << "\n  ┌";
+        for (int k = 0; k < n * (width) + 1; k++) std::cout << "─";
+        std::cout << "┐" << std::endl;
+
+        for (std::size_t i = 0; i < n; i++) {
+            std::cout << i + 1 << " │"; 
+
+            for (std::size_t j = 0; j < n; j++) {
+                if (result.distances[i][j] == INF){
+                    std::cout << std::setw(width) << "INF";
+                } else{
+                    std::cout << std::setw(width) << result.distances[i][j];
+                }
+            }
+            
+            std::cout << " │" << std::endl; 
+        }
+
+        // 3. Línea inferior
+        std::cout << "  └";
+        for (int k = 0; k < n * (width) + 1; k++) std::cout << "─";
+        std::cout << "┘" << std::endl;
+    }
     
 }
 #endif

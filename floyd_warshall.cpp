@@ -70,9 +70,9 @@ void printPath_Floyd_Warshall(int u, int v , std::vector<std::vector<int>>& mask
 { 
     if (mask.size() != 0){
         if (mask[u][v] == -1) {
-            std::cout << "No path";
+            std::cout << "No path\n";
         } else if (mask[u][v] == -2) {
-            std::cout << "No path (debido a ciclo negativo)" << std::endl;
+            std::cout << "No path (debido a ciclo negativo)\n" << std::endl;
         } else {
             std::vector<int> path = { u }; 
             while (u != v) { 
@@ -81,8 +81,8 @@ void printPath_Floyd_Warshall(int u, int v , std::vector<std::vector<int>>& mask
             } 
             int n = path.size(); 
             for (int i = 0; i < n - 1; i++) 
-                std::cout << path[i] << " -> "; 
-            std::cout << path[n - 1] << std::endl; 
+                std::cout << path[i] + 1 << " -> "; 
+            std::cout << path[n - 1] + 1 << std::endl; 
         }
     }
 } 

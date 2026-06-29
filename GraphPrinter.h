@@ -17,7 +17,7 @@ public:
 
         std::cout << "   ";
         for (int i = 0; i < n; i++){
-            std::cout << std::setw(width) << i;
+            std::cout << std::setw(width) << i + 1;
         }
         
         std::cout << "\n  ┌";
@@ -25,7 +25,7 @@ public:
         std::cout << "┐" << std::endl;
 
         for (std::size_t i = 0; i < n; i++) {
-            std::cout << i << " │"; 
+            std::cout << i + 1<< " │"; 
 
             for (std::size_t j = 0; j < n; j++) {
                 if (adj[i][j] == T_max){

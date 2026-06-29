@@ -17,9 +17,12 @@ int main() {
     SetConsoleOutputCP(CP_UTF8);
     #endif
     Graph<float> grafo;
-    int u = 0;
-    int v = 2;
-    CreateGraph::load_file(grafo, "test.mtx");
+    int i = 1;
+    int j = 3;
+    int u = i - 1;
+    int v = j - 1;
+
+    CreateGraph::load_file(grafo, "graphneg.mtx");
     std::vector<Edge<float>> edge_list = grafo.get_edge_list_copy();
 
     std::cout << "--- Matriz adyacencia Grafo ---\n\n";

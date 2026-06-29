@@ -12,5 +12,6 @@ template<typename T>
 struct ASPSResult{
     std::vector<std::vector<T>> distances;
     std::vector<std::vector<int>> preds;
+    bool negative_cycle = false;
 };
 #endif
