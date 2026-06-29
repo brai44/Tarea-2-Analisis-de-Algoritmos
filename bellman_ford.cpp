@@ -9,6 +9,7 @@
 #include <sstream>
 #include <string>
 #include <vector>
+#include <iomanip>
 #include "utils.h"
 
 template<typename T>
@@ -89,7 +90,7 @@ void printPath_Bellman_Ford(int u, int v, const std::vector<int>& pred) {
     std::reverse(path.begin(), path.end());
 
     for (size_t i = 0; i < path.size(); ++i) {
-        std::cout << path[i] +1<< (i < path.size() - 1 ? " -> " : "");
+        std::cout << path[i] << (i < path.size() - 1 ? " -> " : "");
     }
     std::cout << std::endl;
 }
@@ -97,17 +98,36 @@ void printPath_Bellman_Ford(int u, int v, const std::vector<int>& pred) {
 template<typename T>
 void print_distance_matrix(const ASPSResult<T>& result, int n) {
     const T INF = std::numeric_limits<T>::max();
-    std::cout << "\n--- Matriz de Distancias ---" << std::endl;
+    std::cout << "\n--- Matriz de Distancias ---\n" << std::endl;
+    const int width = 4; 
 
-    for (int i = 0; i < n; ++i) {
-        for (int j = 0; j < n; ++j) {
-            if (result.distances[i][j] == INF) {
-                std::cout << " INF ";
-            } else {
-                std::cout << " " << result.distances[i][j] << " ";
+    std::cout << "   ";
+    for (int i = 0; i < n; i++){
+        std::cout << std::setw(width) << i;
+    }
+
+    std::cout << "\n  ┌";
+    for (int k = 0; k < n * (width) + 1; k++) std::cout << "─";
+    std::cout << "┐" << std::endl;
+
+    for (std::size_t i = 0; i < n; i++) {
+        std::cout << i << " │"; 
+
+        for (std::size_t j = 0; j < n; j++) {
+            if (result.distances[i][j] == INF){
+                std::cout << std::setw(width) << "INF";
+            } else{
+                std::cout << std::setw(width) << result.distances[i][j];
             }
         }
-        std::cout << std::endl;
+        
+        std::cout << " │" << std::endl; 
     }
+
+    // 3. Línea inferior
+    std::cout << "  └";
+    for (int k = 0; k < n * (width) + 1; k++) std::cout << "─";
+    std::cout << "┘" << std::endl;
+    
 }
 #endif

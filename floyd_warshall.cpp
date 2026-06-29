@@ -68,8 +68,6 @@ std::vector<std::vector<int>> floydWarshall(std::vector<std::vector<T>>& adj) {
 void printPath(int u, int v , std::vector<std::vector<int>>& mask) 
 { 
     if (mask.size() != 0){
-        u = u - 1;
-        v = v - 1;
         if (mask[u][v] == -1) {
             std::cout << "No path";
         } else if (mask[u][v] == -2) {
@@ -82,8 +80,8 @@ void printPath(int u, int v , std::vector<std::vector<int>>& mask)
             } 
             int n = path.size(); 
             for (int i = 0; i < n - 1; i++) 
-                std::cout << path[i]+ 1 << " -> "; 
-            std::cout << path[n - 1]+ 1 << std::endl; 
+                std::cout << path[i] << " -> "; 
+            std::cout << path[n - 1] << std::endl; 
         }
     }
 } 

@@ -11,6 +11,7 @@
 #include <limits>
 #include <set>
 #include "utils.h"
+#include <iomanip>
 
 template<typename T>
 
@@ -25,7 +26,6 @@ public:
 
     Graph() = default;
 
-    // Carga un archivo mtx
     void load_file(const std::string filename, bool zero_indexed = true) {
         std::ifstream input(filename);
 
@@ -148,19 +148,38 @@ void create_graph_densidad(int n, int e) {
         return q_nodes;
     }
     
-    void print_adj(){
+    void print_adj() {
         std::size_t n = size();
         const T T_max = std::numeric_limits<T>::max();
+        const int width = 4; 
 
-        for(std::size_t i=0;i<n;i++){
-            std::cout<<(adj[i][0] == T_max ? -1 : adj[i][0]);
-            
-            for(std::size_t j=1;j<n;j++){
-                std::cout<<" "<<(adj[i][j] == T_max ? -1 : adj[i][j]);
-            }
-
-            std::cout<<std::endl;
+        std::cout << "   ";
+        for (int i = 0; i < n; i++){
+            std::cout << std::setw(width) << i;
         }
+        
+        std::cout << "\n  ┌";
+        for (int k = 0; k < n * (width) + 1; k++) std::cout << "─";
+        std::cout << "┐" << std::endl;
+
+        for (std::size_t i = 0; i < n; i++) {
+            std::cout << i << " │"; 
+
+            for (std::size_t j = 0; j < n; j++) {
+                if (adj[i][j] == T_max){
+                    std::cout << std::setw(width) << "INF";
+                } else{
+                    std::cout << std::setw(width) << adj[i][j];
+                }
+            }
+            
+            std::cout << " │" << std::endl; 
+        }
+
+        // 3. Línea inferior
+        std::cout << "  └";
+        for (int k = 0; k < n * (width) + 1; k++) std::cout << "─";
+        std::cout << "┘" << std::endl;
     }
 
     void print_edg(){
