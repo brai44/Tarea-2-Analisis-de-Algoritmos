@@ -30,8 +30,9 @@ std::vector<std::vector<int>> floydWarshall(std::vector<std::vector<T>>& adj) {
 
     for (std::size_t k = 0; k < n; k++) {
         for (std::size_t i = 0; i < n; i++) {
+            if (adj[i][k] > INF) continue;
             for (std::size_t j = 0; j < n; j++) {
-                if (adj[i][k] < INF && adj[k][j] < INF) {
+                if (adj[k][j] < INF) {
                     if (adj[i][j] > adj[i][k] + adj[k][j]) {
                         adj[i][j] = adj[i][k] + adj[k][j];
                         if (size_limit) {
