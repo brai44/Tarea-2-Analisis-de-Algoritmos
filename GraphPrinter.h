@@ -38,7 +38,6 @@ public:
             std::cout << " │" << std::endl; 
         }
 
-        // 3. Línea inferior
         std::cout << "  └";
         for (int k = 0; k < n * (width) + 1; k++) std::cout << "─";
         std::cout << "┘" << std::endl;

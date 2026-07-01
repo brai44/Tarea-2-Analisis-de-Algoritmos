@@ -48,7 +48,7 @@ int main(int argc, char *argv[])
     std::random_device rd;
     std::mt19937_64 rng(rd());
     std::uniform_int_distribution<std::int64_t> u_distr; // change depending on app
-    std::vector<int> nodos_q = {50, 100, 200, 400, 600, 800, 1000, 1250, 1500, 1750, 2000, 3000, 5000};
+    std::vector<int> nodos_q = {50, 100, 200, 400, 600, 800, 1000};
 
     // File to write time data
     std::ofstream time_data;

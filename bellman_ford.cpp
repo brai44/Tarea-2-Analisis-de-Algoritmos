@@ -17,10 +17,9 @@ void bellmanFord(std::vector<Edge<T>>& graph, int n, int source_node, ASPSResult
     std::size_t V = n;
     const T INF = std::numeric_limits<T>::max();
 
-    // Inicializar distancia desde source a los demas vertices como infinito
+    // distance[v] distancia minima conocida desde el origen hacia el vértice v
     std::vector<T> distance(V, INF);
-    // Vector contiene el predecesor para llegar al nodo con indice v
-    // pred[1] es el paso anterior para llegar al nodo 1
+    // pred[v] vertice anterior en el camino mas corto hacia v
     std::vector<int> pred(V, -1);
 
     // Distancia al origen es 0
@@ -40,11 +39,13 @@ void bellmanFord(std::vector<Edge<T>>& graph, int n, int source_node, ASPSResult
                 changes = true;
             }
         }
+
         // Si no hubo cambios al pasar por todas las aristas se llego al óptimo
         if(!changes)
             break;
     }
 
+    // Detectar ciclos de peso negativo con una pasada adicional
     for(const auto& e: graph){
         if(distance[e.source]!=INF && distance[e.source] + e.w < distance[e.destination]){
             std::cout<<"Ciclo de peso negativo encontrado.\n";
@@ -59,10 +60,12 @@ void bellmanFord(std::vector<Edge<T>>& graph, int n, int source_node, ASPSResult
 template<typename T>
 ASPSResult<T> asps_bellman_ford(std::vector<Edge<T>>& graph, int n){
     ASPSResult<T> result;
+
     //Reservar espacio para evitar reallocationes
     result.distances.reserve(n);
     result.preds.reserve(n);
 
+    // Ejecutar Bellman-Ford para cada vertice como origen
     for(int i=0; i<n; i++){
         bellmanFord(graph, n, i, result);
     }
@@ -71,13 +74,13 @@ ASPSResult<T> asps_bellman_ford(std::vector<Edge<T>>& graph, int n){
 
 
 void printPath_Bellman_Ford(int u, int v, const std::vector<int>& pred) {
-    // 1. Verificamos si hay camino
+    // Verificamos si hay camino
     if (pred[v] == -1 && u != v) {
         std::cout << "No existe camino de " << u + 1 << " a " << v + 1 << std::endl;
         return;
     }
 
-    // 2. Reconstruimos el camino desde v hacia atrás
+    // Reconstruimos el camino desde v hacia atrás
     std::vector<int> path;
     int curr = v;
     
@@ -87,7 +90,7 @@ void printPath_Bellman_Ford(int u, int v, const std::vector<int>& pred) {
         curr = pred[curr];
     }
 
-    // 3. Imprimimos el camino (como lo guardamos al revés, lo invertimos)
+    // Imprimimos el camino
     std::reverse(path.begin(), path.end());
 
     for (size_t i = 0; i < path.size(); ++i) {
@@ -126,7 +129,6 @@ void print_distance_matrix(const ASPSResult<T>& result, int n) {
             std::cout << " │" << std::endl; 
         }
 
-        // 3. Línea inferior
         std::cout << "  └";
         for (int k = 0; k < n * (width) + 1; k++) std::cout << "─";
         std::cout << "┘" << std::endl;
