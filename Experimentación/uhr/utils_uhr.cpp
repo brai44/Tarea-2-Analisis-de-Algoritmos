@@ -12,44 +12,30 @@
 #include <string>
 #include <vector>
 
-inline void validate_input(int argc, char *argv[], std::int64_t& runs,
-    std::int64_t& lower, std::int64_t& upper, std::int64_t& step)
+inline void validate_input(int argc, char *argv[], std::int64_t& runs)
 {
-    if (argc != 6) {
-        std::cerr << "Usage: <filename> <RUNS> <LOWER> <UPPER> <STEP>" << std::endl;
-        std::cerr << "<filename> is the name of the file where performance data will be written." << std::endl;
-        std::cerr << "It is recommended for <filename> to have .csv extension and it should not previously exist." << std::endl;
-        std::cerr << "<RUNS>: numbers of runs per test case: should be >= 32." << std::endl;
-        std::cerr << "<LOWER> <UPPER> <STEP>: range of test cases." << std::endl;
-        std::cerr << "These should all be positive." << std::endl;
+    // Ahora esperamos solo 3 argumentos: ./programa <filename> <RUNS>
+    if (argc != 3) {
+        std::cerr << "Uso: " << argv[0] << " <filename> <RUNS>" << std::endl;
+        std::cerr << "<filename>: nombre del archivo CSV de salida." << std::endl;
+        std::cerr << "<RUNS>: número de ejecuciones por caso de prueba (mínimo 4)." << std::endl;
         std::exit(EXIT_FAILURE);
     }
 
-    // Read command line arguments
+    // Leer el número de ejecuciones
     try {
         runs = std::stoll(argv[2]);
-        lower = std::stoll(argv[3]);
-        upper = std::stoll(argv[4]);
-        step = std::stoll(argv[5]);
     } catch (std::invalid_argument const& ex) {
-        std::cerr << "std::invalid_argument::what(): " << ex.what() << std::endl;
+        std::cerr << "Error: <RUNS> debe ser un número entero válido." << std::endl;
         std::exit(EXIT_FAILURE);
     } catch (std::out_of_range const& ex) {
-        std::cerr << "std::out_of_range::what(): " << ex.what() << std::endl;
+        std::cerr << "Error: <RUNS> fuera de rango." << std::endl;
         std::exit(EXIT_FAILURE);
     }
 
-    // Validate arguments
+    // Validar el mínimo de ejecuciones
     if (runs < 4) {
-        std::cerr << "<RUNS> must be at least 4." << std::endl;
-        std::exit(EXIT_FAILURE);
-    }
-    if (step <= 0 or lower <= 0 or upper <= 0) {
-        std::cerr << "<STEP>, <LOWER> and <UPPER> have to be positive." << std::endl;
-        std::exit(EXIT_FAILURE);
-    }
-    if (lower > upper) {
-        std::cerr << "<LOWER> must be at most equal to <UPPER>." << std::endl;
+        std::cerr << "Error: <RUNS> debe ser al menos 4." << std::endl;
         std::exit(EXIT_FAILURE);
     }
 }

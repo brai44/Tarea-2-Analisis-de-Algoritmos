@@ -28,9 +28,11 @@
 int main(int argc, char *argv[])
 {
     // Validate and sanitize input
-    std::int64_t runs, lower, upper, step;
-    validate_input(argc, argv, runs, lower, upper, step);
-
+    std::int64_t runs;
+    validate_input(argc, argv, runs);
+    std::int64_t upper =1;
+    std::int64_t lower=1;
+    std::int64_t step=1;
     // Set up clock variables
     std::int64_t n, i, executed_runs;
     double time_fw;
